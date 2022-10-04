@@ -83,8 +83,10 @@ chown pdns:pdns "${pdns_config}"
 envtpl < /recursor.conf.tpl > "${recursor_config}"
 chown recursor:recursor "${recursor_config}"
 
+# start the caching name server
 /usr/sbin/pdns_recursor &
 
+# start the authoritative name server
 /usr/sbin/pdns_server &
 
 wait -n
