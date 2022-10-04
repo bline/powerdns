@@ -91,6 +91,3 @@ wait -n
 
 exit $?
 
-
-exec "$@"
-

@@ -47,6 +47,5 @@ RUN mkdir -p /data \
   && mkdir -p /var/run/pdns \
   && chown -R pdns:pdns /var/run/pdns
 
-ENTRYPOINT [ "/entrypoint.sh" ]
+CMD [ "/entrypoint.sh" ]
 
-CMD [ "/usr/sbin/pdns_server" ]
