@@ -5,15 +5,17 @@ set -euo pipefail
 parse_config() {
   config_file="$1"
   prefix="$2"
+  tab=$'\t';
+  pattern=" |'|"'"'"|$tab";
   # If the config file exists, read it into the env
   if [ -f "${config_file}" ]; then
     while IFS='=' read -r n v; do
-      echo "${n}=${v}";
-
-      # skip if a _FILE version exists
-      vname="${prefix}_${n//-/_}_FILE";
-      if [[ ! -v "${vname}" ]]; then
-        export "${prefix}_${n//-/_}=${v}";
+      if [[ ! $n =~ $pattern ]]; then
+        # skip if a _file version exists
+        vname="${prefix}_${n//-/_}_FILE";
+        if [[ ! -v "${vname}" ]]; then
+          export "${prefix}_${n//-/_}=${v}";
+        fi
       fi
     done <"${config_file}"
   fi
@@ -36,8 +38,8 @@ pdns_prefix="PDNS"
 recursor_config="/etc/pdns/recursor.conf"
 recursor_prefix="RECURSOR"
 
-parse_config "${pdns_config}" "${pdns_prefix}"
-parse_config "${recursor_config}" "${recursor_prefix}"
+parse_config "/pdns.conf" "${pdns_prefix}"
+parse_config "/recursor.conf" "${recursor_prefix}"
 
 parse_env "${pdns_prefix}"
 parse_env "${recursor_prefix}"
